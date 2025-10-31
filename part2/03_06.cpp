@@ -34,12 +34,12 @@ public:
         if (!std::isfinite(m_side1) || !std::isfinite(m_side2) || !std::isfinite(m_side3))
             return false;
 
-        if (m_side1 <= 0.0 || m_side2 <= 0.0 || m_side3 <= 0.0)
+        if (!std::isgreater(m_side1, 0.0) || !std::isgreater(m_side2, 0.0) || !std::isgreater(m_side3, 0.0))
             return false;
 
-        return (m_side1 + m_side2 > m_side3) &&
-               (m_side1 + m_side3 > m_side2) &&
-               (m_side2 + m_side3 > m_side1);
+        return (std::isgreater(m_side1 + m_side2, m_side3)) &&
+               (std::isgreater(m_side1 + m_side3, m_side2)) &&
+               (std::isgreater(m_side2 + m_side3, m_side1));
     }
 
     double perimeter() const override final {
@@ -50,7 +50,7 @@ public:
         if (!is_valid()) return 0.0;
         const double s = perimeter() / 2.0;
         const double value = s * (s - m_side1) * (s - m_side2) * (s - m_side3);
-        return value > 0.0 ? std::sqrt(value) : 0.0;
+        return std::isgreater(value, 0.0) ? std::sqrt(value) : 0.0;
     }
 };
 
@@ -66,7 +66,7 @@ public:
     explicit Square(double side) : m_side(side) {}
 
     bool is_valid() const {
-        return std::isfinite(m_side) && m_side > 0.0;
+        return std::isfinite(m_side) && std::isgreater(m_side, 0.0);
     }
 
     double perimeter() const override {
@@ -90,7 +90,7 @@ public:
     explicit Circle(double radius) : m_radius(radius) {}
 
     bool is_valid() const {
-        return std::isfinite(m_radius) && m_radius > 0.0;
+        return std::isfinite(m_radius) && std::isgreater(m_radius, 0.0);
     }
 
     double perimeter() const override {
@@ -101,6 +101,23 @@ public:
         return is_valid() ? std::numbers::pi * m_radius * m_radius : 0.0;
     }
 };
+
+
+// class Test1 : public Triangle {
+// private:
+//     double m_test{};
+// public:
+//     double area() const override {
+//         return m_test;
+//     }
+// };
+
+// class Test2 : public Circle {
+// private:
+//     double m_test{};
+// public:
+//  double test() {return m_test;}
+// };
 
 //////////////////////////////////////////////////////////////
 // Demonstration
