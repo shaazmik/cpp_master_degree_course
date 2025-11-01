@@ -1,3 +1,4 @@
+//@compile clang++ part2/03_07.cpp -std=c++2b -Wall -Wextra -Wpedantic
 #include <algorithm>
 #include <cstddef>
 #include <initializer_list>
@@ -121,8 +122,8 @@ public:
 
     void swap(Vector& other) noexcept
     {
-        std::swap(m_array, other.m_array);
-        std::swap(m_size, other.m_size);
+        std::swap(m_array,    other.m_array);
+        std::swap(m_size,     other.m_size);
         std::swap(m_capacity, other.m_capacity);
     }
 
