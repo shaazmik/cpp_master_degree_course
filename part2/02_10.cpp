@@ -92,8 +92,8 @@ int median_of_three(std::vector<int>& vec, std::size_t left, std::size_t right)
 
 void quick_sort_step(std::vector<int>& vec, std::size_t left, std::size_t right)
 {   
-    if (left == right) {
-        return;
+	if (right - left < 16) {
+        return order(vec, left, right + 1);
     }
 
     int pivot = median_of_three(vec, left, right);
@@ -131,17 +131,17 @@ void quick_sort(std::vector < int > & vector)
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
-std::vector<int> generate_random_vector(size_t size, int min_val = 1, int max_val = 1000) {
+std::vector<int> generate_random_vector(size_t size, int min_val = 1) {
+    std::vector<int> result(size);
+    std::iota(result.begin(), result.end(), min_val);
+
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_int_distribution<int> dist(min_val, max_val);
-    
-    std::vector<int> result(size);
-    for (size_t i = 0; i < size; ++i) {
-        result[i] = dist(gen);
-    }
+    std::shuffle(result.begin(), result.end(), gen);
+
     return result;
 }
+
 std::vector<int> generate_sorted_vector(size_t size) {
     std::vector<int> result(size);
     for (size_t i = 0; i < size; ++i) {
@@ -202,7 +202,7 @@ int main() {
     // Test 1: Small vectors for visual verification
     std::cout << "\n--- TEST 1: Small vectors (size 20) ---" << std::endl;
     
-    auto small_vector = generate_random_vector(20, 1, 100);
+    auto small_vector = generate_random_vector(20, 1);
     std::cout << "Original small vector:" << std::endl;
     print_vector(small_vector, "Original");
     
@@ -228,7 +228,7 @@ int main() {
     std::cout << "\n--- TEST 2: Large vectors (size 100,000) ---" << std::endl;
     
     const size_t LARGE_SIZE = 100000;
-    auto large_vector = generate_random_vector(LARGE_SIZE, 1, 1000000);
+    auto large_vector = generate_random_vector(LARGE_SIZE, 1);
     
     test_sort_algorithm(large_vector, "Merge Sort on random array", merge_sort);
     test_sort_algorithm(large_vector, "Quick Sort on random array", quick_sort);
