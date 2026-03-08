@@ -1,2 +1,5 @@
 .vscode
 *.out
+boost_1_85_0*
+boost_1_85_0.tar.gz
+/part4/06_05/output
