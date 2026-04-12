@@ -1,0 +1,3 @@
+[submodule "Education"]
+	path = Education
+	url = https://github.com/i-s-m-mipt/Education.git
