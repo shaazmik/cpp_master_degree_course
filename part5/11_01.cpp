@@ -1,0 +1,79 @@
+//@compile g++ part5/11_01.cpp -std=c++23 -Wall -Wextra -Wpedantic
+#include <cassert>
+#include <print>
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+class Wrapper
+{
+public:
+
+    using FuncPtr = Wrapper (*)();
+
+    explicit Wrapper(FuncPtr p) : m_ptr(p) {}
+
+    operator FuncPtr() const { return m_ptr; }
+
+private:
+
+    FuncPtr m_ptr;
+};
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+Wrapper test()
+{
+    return Wrapper(&test);
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+static void demo()
+{
+    Wrapper function = test();
+    (*function)();
+
+    std::print("demo: ok\n");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+static void test_roundtrip()
+{
+    Wrapper w1 = test();
+
+    Wrapper::FuncPtr fp = w1;
+    assert(fp == &test);
+
+    Wrapper w2 = (*w1)();
+    Wrapper::FuncPtr fp2 = w2;
+    assert(fp2 == &test);
+
+    std::print("test_roundtrip: passed\n");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+static void test_chain()
+{
+    Wrapper w = test();
+
+    for (auto i = 0; i < 5; ++i)
+        w = (*w)();
+
+    Wrapper::FuncPtr fp = w;
+    assert(fp == &test);
+
+    std::print("test_chain: passed\n");
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+int main()
+{
+    demo();
+    test_roundtrip();
+    test_chain();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////
